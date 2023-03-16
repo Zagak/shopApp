@@ -1,9 +1,10 @@
-import { View, StyleSheet, Text, Image } from "react-native";
+import { View, StyleSheet, Text, Image, ImageBackground, Dimensions, Pressable } from "react-native";
 import { Colors } from "../constants/Colors";
 import { FlatList } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
+
 
 function ItemsList() {
-
     const data = [
         { name: 'Sabie', price: 23 },
         { name: 'Topor', price: 12 },
@@ -15,43 +16,93 @@ function ItemsList() {
         { name: 'Scaunefd', price: 32 },
         { name: 'Scaun', price: 32 },
         { name: 'Scaun', price: 32 },
-        { name: 'Scaun', price: 32 },
-        { name: 'Scaun', price: 32 },
+        { name: 'A', price: 32 },
+        { name: 'B', price: 32 },
     ];
 
+    const navigation = useNavigation();
+
+    const handlePress = () => {
+        navigation.navigate("Purchase");
+    };
+
     const renderItem = ({ item, index }) => (
+
         <View style={styles.item}>
             <Image style={styles.imageCentipide} source={require('../images/centipideBody.png')} />
-            <Image style={styles.imageStone} source={require('../images/stone.png')} />
-            <View style={styles.textContainer}>
-                <Text style={styles.itemInfo}>{item.name}</Text>
-                <Text style={styles.itemInfo}>{item.price}</Text>
-            </View>
+            <Pressable onPress={handlePress}>
+                {({ pressed }) => (
+                    <>
+                        <Image style={[styles.imageStone, pressed && { opacity: 0.7 }]} source={require('../images/stone.png')} />
+                        <View style={styles.textContainer}>
+                            <Text style={styles.itemInfo}>{item.name}</Text>
+                            <Text style={styles.itemInfo}>{item.price}</Text>
+                        </View>
+                    </>
+                )}
+            </Pressable>
+
+
         </View>
+
     );
 
     const renderFirstTwoItems = ({ item, index }) => (
-        <View style={styles.item}>
+        <View style={[styles.item]}>
             <Image style={styles.imageCentipideHead} source={require('../images/centipideHead.png')} />
-            <Image style={[styles.imageCentipide, !(index >= 0 && index <= 10) && styles.blurredImage]} source={require('../images/centipideBody.png')} />
-            <Image style={styles.imageStone} source={require('../images/stone.png')} />
-            <View style={styles.textContainer}>
-                <Text style={styles.itemInfo}>{item.name}</Text>
-                <Text style={styles.itemInfo}>{item.price}</Text>
-            </View>
+            <Image style={styles.imageCentipide} source={require('../images/centipideBody.png')} />
+            <Pressable onPress={handlePress}>
+                {({ pressed }) => (
+                    <>
+                        <Image style={[styles.imageStone, pressed && { opacity: 0.7 }]} source={require('../images/stone.png')} />
+                        <View style={styles.textContainer}>
+                            <Text style={styles.itemInfo}>{item.name}</Text>
+                            <Text style={styles.itemInfo}>{item.price}</Text>
+                            <Text>{data.length}</Text>
+                        </View>
+                    </>
+                )}
+            </Pressable>
+
         </View>
     );
 
+    const renderLastTwoItems = ({ item, index }) => (
+        <Pressable >
+            {({ pressed }) => (
+                <View style={[styles.item, pressed && { opacity: 0.9 }]}>
+                    <Image style={styles.imageCentipideHead} source={require('../images/centipideHead.png')} />
+                    <Image style={styles.imageCentipide} source={require('../images/centipideBody.png')} />
+                    <Image style={styles.imageStone} source={require('../images/stone.png')} />
+                    <View style={styles.textContainer}>
+                        <Text style={styles.itemInfo}>{item.name}</Text>
+                        <Text style={styles.itemInfo}>{item.price}</Text>
+                        <Text>{data.length}</Text>
+                    </View>
+                </View>
+            )}
+        </Pressable>
+    );
+
     return (
-        <FlatList
-            data={data}
-            renderItem={(data) => (data.index < 2 ? renderFirstTwoItems(data) : renderItem(data))}
-            keyExtractor={(item, index) => index.toString()}
-            style={styles.container}
-            numColumns={2}
-            contentContainerStyle={{ alignItems: 'flex-end' }}
-            removeClippedSubviews={false}
-        />
+        <View style={styles.bigContainer}>
+            <FlatList
+                data={data}
+                renderItem={(data) =>
+                    data.index < 2
+                        ? renderFirstTwoItems(data)
+                        : data.index >= data.length - 2
+                            ? renderLastTwoItems(data)
+                            : renderItem(data)
+                }
+                keyExtractor={(item, index) => index.toString()}
+                style={styles.container}
+                numColumns={2}
+                contentContainerStyle={{ flexGrow: 1, paddingBottom: 120, paddingTop: 80 }}
+                removeClippedSubviews={false}
+            />
+            <Image source={require('../images/dirt.jpg')} style={styles.backgroundImage} />
+        </View>
     );
 }
 
@@ -59,25 +110,31 @@ export default ItemsList;
 
 const styles = StyleSheet.create({
     container: {
-        bottom: '50%',
-        backgroundColor: Colors.darkBrown,
-        paddingHorizontal: 20,
-        //paddingBottom: '10%',
-        paddingBottom: '95%',
+        bottom: Dimensions.get('screen').height * 0.5,//'50%',
+        backgroundColor: 'transparent',
+        // paddingHorizontal: Dimensions.get('screen').width*0.01,//20,
+        paddingBottom: Dimensions.get('screen').height * 0.45,
         borderRadius: 8,
-
+        zIndex: 2
+    },
+    bigContainer: {
+        flex: 1,
+        //backgroundColor: Colors.lightBrown,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     item: {
         margin: 10,
         paddingHorizontal: 50,
         paddingVertical: 30,
+
     },
     imageStone: {
         width: 110,
         height: 110,
         position: 'absolute',
-        marginHorizontal: 20,
-        marginVertical: 20
+        marginHorizontal: -30,
+        marginVertical: -10
     },
     imageCentipide: {
         width: 180,
@@ -92,7 +149,7 @@ const styles = StyleSheet.create({
         height: 140,
         position: 'absolute',
         marginHorizontal: 20,
-        marginVertical: -25,
+        marginVertical: -75,
         alignSelf: 'center'
     },
     textContainer: {
@@ -107,12 +164,15 @@ const styles = StyleSheet.create({
         color: 'white',
 
     },
-    blurredImage: {
+    backgroundImage: {
+        bottom: Dimensions.get('screen').height * 0.046,
+        width: Dimensions.get('screen').height * 0.425,
+        height: Dimensions.get('screen').height * 0.46,
         position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
+        zIndex: 1,
+        borderRadius: 16,
+        borderWidth: 5,
+        borderColor: Colors.darkBrown
     },
 
 });
