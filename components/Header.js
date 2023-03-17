@@ -1,6 +1,41 @@
 import { View, Text, StyleSheet, Image, SafeAreaView, ImageBackground,Dimensions } from "react-native";
+import { getCurrencys } from "../backend/http";
+import { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import {useIsFocused} from "@react-navigation/native";
 
 function Header() {
+    const [currencys,setCurrencys]= useState({});
+    const [isBack,setIsBack] = useState(false);
+
+    const isFocused=useIsFocused();
+
+    const navigation=useNavigation();
+    const isComingBack=navigation.canGoBack();
+
+    
+
+    useEffect(() => {
+        async function fetchCurrencys() {
+            try {
+                if(isFocused===true){
+                const data = await getCurrencys();
+                setCurrencys(data[0]);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        fetchCurrencys();
+    }, [isFocused]);
+
+    
+
+    useEffect(() => {
+        if(isFocused===true) console.log("I m back");
+    }, [isFocused]);
+
     return (
         <ImageBackground style={styles.background} source={require('../images/headerBackground.jpg')}>
             <SafeAreaView style={styles.container}>
@@ -12,11 +47,11 @@ function Header() {
                 <Text style={styles.shopTitle}>SHOP</Text>
                 <View style={styles.currencysContainer}>
                     <View style={styles.currencyInfoContainerCommon}>
-                        <Text style={styles.currency}>999K</Text>
+                        <Text style={styles.currency}>{currencys.commonCurrency}</Text>
                         <Image style={styles.currencyImage} source={require('../images/leaf.png')}/>
                     </View>
                     <View style={styles.currencyInfoContainerPremium}>
-                        <Text style={styles.currency}>6666</Text>
+                        <Text style={styles.currency}>{currencys.premiumCurrency}</Text>
                         <Image style={styles.currencyImage} source={require('../images/dew.png')}/>
                     </View>
                 </View>

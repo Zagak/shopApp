@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { Colors } from './constants/Colors';
 import ItemsShop from './Screens/ItemsShop';
-import ItemPurchase from './Screens/ItemPurchase';
+import ItemDetails from './Screens/ItemDetails';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -16,7 +16,7 @@ export default function App() {
           headerShown:false,
         }}>
           <Stack.Screen name="Shop" component={ItemsShop} />
-          <Stack.Screen name="Purchase" component={ItemPurchase} />
+          <Stack.Screen name="Details" component={ItemDetails} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
