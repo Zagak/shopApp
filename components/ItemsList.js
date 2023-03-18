@@ -170,8 +170,6 @@ const styles = StyleSheet.create({
         top:45,
         left:25,
         flexDirection:'row',
-        //paddingHorizontal:'2%'
-        
     },
     backgroundImage: {
         bottom: DeviceDimensions.height * 0.046,

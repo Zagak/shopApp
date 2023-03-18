@@ -54,7 +54,7 @@ export async function buyAnItem({id}){
     try {
         const response = await fetch(api + `items/${id}`);
         const data = await response.json();
-        console.log(data);
+        
 
         if(data.isOwned===true) return 'alreadyOwned';
         else {
@@ -62,7 +62,6 @@ export async function buyAnItem({id}){
             const currencyType=(data.currency==='common' ? 'commonCurrency' : 'premiumCurrency');
             if(currencyType==='commonCurrency'&&currencys[0].commonCurrency<data.price) return 'tooExpensive';
             if(currencyType==='premiumCurrency'&&currencys[0].premiumCurrency<data.price) return 'tooExpensive';
-            // if((currencys[0].commonCurrency||currencys[0].premiumCurrency)<data.price) return 'tooExpensive';
             else{
                 await setOwned({id});
                 await withdrawCurrency({id},currencys[0].premiumCurrency-data.price,currencyType);

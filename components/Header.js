@@ -1,21 +1,14 @@
 import { View, Text, StyleSheet, Image, SafeAreaView, ImageBackground } from "react-native";
 import { getCurrencys } from "../backend/http";
 import { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import {useIsFocused} from "@react-navigation/native";
 import { DeviceDimensions } from "../constants/DeviceDimensions";
 
 function Header() {
     const [currencys,setCurrencys]= useState({});
-    const [isBack,setIsBack] = useState(false);
-
     const isFocused=useIsFocused();
 
-    const navigation=useNavigation();
-    const isComingBack=navigation.canGoBack();
-
-    
-
+   
     useEffect(() => {
         async function fetchCurrencys() {
             try {
@@ -31,11 +24,6 @@ function Header() {
         fetchCurrencys();
     }, [isFocused]);
 
-    
-
-    useEffect(() => {
-        if(isFocused===true) console.log("I m back");
-    }, [isFocused]);
 
     return (
         <ImageBackground style={styles.background} source={require('../images/headerBackground.jpg')}>
@@ -91,7 +79,6 @@ const styles = StyleSheet.create({
     },
     currencyInfoContainerCommon:{
         flexDirection:'row',
-        //marginHorizontal:60,
         bottom:30,
         right:20,
         backgroundColor:'#E6CA8D',
@@ -103,7 +90,6 @@ const styles = StyleSheet.create({
     },
     currencyInfoContainerPremium:{
         flexDirection:'row',
-        //marginHorizontal:60,
         bottom:30,
         left:90,
         backgroundColor:'#E6CA8D',

@@ -5,16 +5,21 @@ import { buyAnItem } from "../backend/http";
 import Alert from "./Alert";
 import { useState } from "react";
 import { DeviceDimensions } from "../constants/DeviceDimensions";
+import Loading from "./Loading";
+
 
 function ItemPurchase({ visible, onClose, id }) {
   const [isExpensive, setIsExpensive] = useState(false);
+  const [isLoading,setIsLoading] = useState(false);
 
   const handleCloseModal = () => {
     onClose();
   };
 
   const handleBuyOnModal = async () => {
+    setIsLoading(true);
     const response = await buyAnItem({ id });
+    setIsLoading(false);
     if (response === 'tooExpensive') setIsExpensive(true);
     onClose();
   }
@@ -22,6 +27,8 @@ function ItemPurchase({ visible, onClose, id }) {
   const handleAlert = () => {
     setIsExpensive(false);
   }
+
+  if(isLoading) return <Loading message={"Hold on!"}/>
 
   return (
     <>

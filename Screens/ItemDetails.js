@@ -5,7 +5,6 @@ import { useNavigation } from "@react-navigation/native";
 import ItemPurchase from "../components/ItemPurchase";
 import { useState } from "react";
 import Alert from "../components/Alert";
-import { getCurrencys } from "../backend/http";
 import { DeviceDimensions } from "../constants/DeviceDimensions";
 
 function ItemDetails({ route }) {
@@ -14,11 +13,6 @@ function ItemDetails({ route }) {
 
     const navigation = useNavigation();
     const item = route.params;
-
-    async function getAvailableMoney(){
-        const pocket = await getCurrencys();
-
-    }
 
     function handleCancel() {
         navigation.navigate("Shop");
