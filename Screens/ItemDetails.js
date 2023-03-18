@@ -1,31 +1,46 @@
-import { View, Text, Image, StyleSheet,Dimensions } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
 import { Colors } from "../constants/Colors";
 import Button from "../components/Button";
 import { useNavigation } from "@react-navigation/native";
 import ItemPurchase from "../components/ItemPurchase";
 import { useState } from "react";
+import Alert from "../components/Alert";
+import { getCurrencys } from "../backend/http";
+import { DeviceDimensions } from "../constants/DeviceDimensions";
 
 function ItemDetails({ route }) {
     const [showItemPurchase, setShowItemPurchase] = useState(false);
+    const [isOwned,setIsOwned] = useState(false);
+
     const navigation = useNavigation();
     const item = route.params;
 
+    async function getAvailableMoney(){
+        const pocket = await getCurrencys();
+
+    }
 
     function handleCancel() {
         navigation.navigate("Shop");
-       // navigation.goBack();
     }
 
     function handleBuy(visible){
-        setShowItemPurchase(visible);
-    };
+        if(item.isOwned===false)setShowItemPurchase(visible);
+        else if(item.isOwned===true)setIsOwned(true);
+        
+    }
+
+    function handleAlert(){
+        setIsOwned(false);
+    }
 
     return (
         <View style={[styles.container, showItemPurchase ? { opacity: 0.6 } : {}]}>
+            {(isOwned===true)&&<Alert title={"Already owned!"} message={"You already own this item."} onClose={handleAlert}/>}
             <View style={styles.detailsContainer}>
                 <Text style={[styles.text, { fontSize: 28 }]}>{item.name}</Text>
-                <Image style={styles.image} source={require('../images/stone.png')} onError={(e) => console.log(e)} />
-                <Text style={styles.text}>{item.details}</Text>
+                <Image style={styles.image} source={{uri:item.avatar}} onError={(e) => console.log(e)} />
+                <Text style={[styles.text,{textAlign:'center',marginHorizontal:12}]}>{item.details}</Text>
 
                 <View style={styles.statsContainer}>
                     <View style={{ marginHorizontal: 12 }}>
@@ -70,7 +85,8 @@ const styles = StyleSheet.create({
         flex: 1,
         borderRadius: 16,
         alignItems: 'center',
-        paddingVertical: '10%'
+        paddingVertical: '10%',
+        marginVertical:-20
     },
     statsContainer: {
         marginTop: 10,
@@ -83,6 +99,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'white',
+        alignSelf:'center'
 
     },
     bar: {
@@ -92,8 +109,8 @@ const styles = StyleSheet.create({
         marginVertical:4.5
     },
     image: {
-        width: Dimensions.get('screen').width*0.4,
-        height: Dimensions.get('screen').width*0.4,
+        width: DeviceDimensions.width*0.4,
+        height: DeviceDimensions.width*0.4,
         marginTop: 20,
         marginBottom: 30,
         borderWidth: 2,
@@ -106,6 +123,7 @@ const styles = StyleSheet.create({
         marginLeft:5
     },
     buttons:{
-        flexDirection:'row'
+        flexDirection:'row',
+        top:10
     }
 });

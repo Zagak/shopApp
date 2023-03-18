@@ -1,30 +1,41 @@
-import { View, Text, StyleSheet, Modal,Dimensions } from "react-native";
+import { View, Text, StyleSheet, Modal } from "react-native";
 import { Colors } from "../constants/Colors";
 import Button from "./Button";
 import { buyAnItem } from "../backend/http";
+import Alert from "./Alert";
+import { useState } from "react";
+import { DeviceDimensions } from "../constants/DeviceDimensions";
 
-function ItemPurchase({ visible, onClose,id }) {
+function ItemPurchase({ visible, onClose, id }) {
+  const [isExpensive, setIsExpensive] = useState(false);
 
-    const handleCloseModal = () => {
-        onClose();
-    };
+  const handleCloseModal = () => {
+    onClose();
+  };
 
-    const handleBuyOnModal = async () => {
-        await buyAnItem({id});
-        onClose();
-    }
+  const handleBuyOnModal = async () => {
+    const response = await buyAnItem({ id });
+    if (response === 'tooExpensive') setIsExpensive(true);
+    onClose();
+  }
+
+  const handleAlert = () => {
+    setIsExpensive(false);
+  }
 
   return (
-    <Modal visible={visible} transparent={true} hasBackdrop={false}>
-      <View style={styles.modalContainer}>
-        <Text style={{marginBottom:10,color:'white'}}>Are you sure you want to buy this item ?</Text>
-        <View style={styles.buttons}>
+    <>
+      {(isExpensive === true) && <Alert title={"Too expensive!"} message={"You don't have enough money to buy this item."} onClose={handleAlert} />}
+      <Modal visible={visible} transparent={true} hasBackdrop={false}>
+        <View style={styles.modalContainer}>
+          <Text style={{ marginBottom: 10, color: 'white' }}>Are you sure you want to buy this item ?</Text>
+          <View style={styles.buttons}>
             <Button onPress={handleBuyOnModal}>Yes</Button>
-            {/* <Button title="Close" onPress={handleCloseModal} />    */}
-            <Button style={{backgroundColor:'red'}} onPress={handleCloseModal}>No</Button>
+            <Button style={{ backgroundColor: 'red' }} onPress={handleCloseModal}>No</Button>
+          </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+    </>
   );
 }
 
@@ -34,13 +45,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 10,
-    marginHorizontal:Dimensions.get('screen').width*0.15,
-    marginTop:Dimensions.get('screen').height*0.4,
-    paddingVertical:Dimensions.get('screen').height*0.04,
-    
+    marginHorizontal: DeviceDimensions.width * 0.15,
+    marginTop: DeviceDimensions.height * 0.4,
+    paddingVertical: DeviceDimensions.height * 0.04,
+
   },
-  buttons:{
-    flexDirection:'row'
+  buttons: {
+    flexDirection: 'row'
   }
 });
 

@@ -1,29 +1,19 @@
-import { View, StyleSheet, Text, Image, ImageBackground, Dimensions, Pressable } from "react-native";
+import { View, StyleSheet, Text, Image, Pressable } from "react-native";
 import { Colors } from "../constants/Colors";
 import { FlatList } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { getItems } from "../backend/http";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faCircleCheck } from '@fortawesome/free-regular-svg-icons'
+import {DeviceDimensions} from "../constants/DeviceDimensions";
+
 
 function ItemsList() {
-    const data = [
-        { name: 'Sabie', price: 23 },
-        { name: 'Topor', price: 12 },
-        { name: 'Sec', price: 15 },
-        { name: 'Foa', price: 7 },
-        { name: 'Masa', price: 55 },
-        { name: 'Scaun', price: 32 },
-        { name: 'Scaun', price: 32 },
-        { name: 'Scaunefd', price: 32 },
-        { name: 'Scaun', price: 32 },
-        { name: 'Scaun', price: 32 },
-        { name: 'A', price: 32 },
-        { name: 'B', price: 32 },
-    ];
-
     const [items, setItems] = useState([]);
 
     const navigation = useNavigation();
+    const isFocused=useIsFocused();
 
     const handlePress = (item) => {
         navigation.navigate("Details",item);
@@ -42,10 +32,12 @@ function ItemsList() {
                         <Image style={styles.imageItem} source={{uri:item.avatar}}/>
                         <View style={styles.textContainer}>
                             <View style={styles.nameContainer}>
-                                <Text style={styles.itemInfo}>{item.name}</Text>
+                                <Text style={[styles.itemInfo,{fontSize:12}]}>{item.name}</Text>
                             </View>
                             <View style={styles.priceContainer}>
-                                <Text style={[styles.itemInfo,{fontWeight:'bold'}]}>{item.price}</Text>
+                                {item.isOwned&&<FontAwesomeIcon size={30} style={styles.checkMark} icon={faCircleCheck} />}
+                                <Text style={[styles.itemInfo,{fontWeight:'bold',flex:1,textAlign:'right'}]}>{item.price}</Text>
+                                <Image style={styles.currency} source={(item.currency === 'common' ? require('../images/leaf.png') : require('../images/dew.png'))} />  
                             </View>
                         </View>
                     </>
@@ -67,14 +59,14 @@ function ItemsList() {
             }
         }
 
-        fetchItems();
-    }, []);
+        if(isFocused===true) fetchItems();
+    }, [isFocused]);
 
 
 
     return (
         <View style={styles.bigContainer}>
-            {/* {items !== null && ( */}
+            {items !== null && (
                 <FlatList
                     data={items}
                     renderItem={(data) =>
@@ -86,7 +78,7 @@ function ItemsList() {
                     contentContainerStyle={{ flexGrow: 1, paddingBottom: 250, paddingTop: 80 }}
                     removeClippedSubviews={false}
                 />
-            {/* )} */}
+            )}
             <Image source={require('../images/dirt.jpg')} style={styles.backgroundImage} />
         </View>
     );
@@ -96,9 +88,9 @@ export default ItemsList;
 
 const styles = StyleSheet.create({
     container: {
-        bottom: Dimensions.get('screen').height * 0.5,
+        bottom: DeviceDimensions.height*0.5,
         backgroundColor: 'transparent',
-        paddingBottom: Dimensions.get('screen').height * 0.45,
+        paddingBottom: DeviceDimensions.height*0.45,
         borderRadius: 8,
         zIndex: 2
     },
@@ -109,7 +101,7 @@ const styles = StyleSheet.create({
     },
     item: {
         margin: 10,
-        paddingHorizontal: 30,//50,
+        paddingHorizontal: 30,
         paddingVertical: 30,
 
     },
@@ -117,7 +109,7 @@ const styles = StyleSheet.create({
         width: 120,
         height: 120,
         position: 'absolute',
-        marginHorizontal: -18,
+        marginHorizontal: -16,
         marginVertical: -10,
         
     },
@@ -151,42 +143,55 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         marginVertical: 145,
         alignSelf: 'center',
-        right:-25
+        right:-19
     },
     textContainer: {
         flex: 1,
         flexDirection: "column",
         justifyContent: "center",
-        width: 90,
+        width: 100,
         height: 40,
         
     },
     itemInfo: {
         color: 'black',
-        alignSelf:'center'
+        alignSelf:'center',
     },
     nameContainer:{
         backgroundColor:'#c9b8a6',
         borderRadius:12,
+        bottom:4,
         alignItems:'center',
     },
     priceContainer:{
         backgroundColor:'#c9b8a6',
         borderRadius:6,
-        width:40,
+        width: DeviceDimensions.width*0.14,
         top:45,
-        left:40
+        left:25,
+        flexDirection:'row',
+        //paddingHorizontal:'2%'
         
     },
     backgroundImage: {
-        bottom: Dimensions.get('screen').height * 0.046,
-        width: Dimensions.get('screen').height * 0.425,
-        height: Dimensions.get('screen').height * 0.46,
+        bottom: DeviceDimensions.height * 0.046,
+        width:  DeviceDimensions.height * 0.425,
+        height: DeviceDimensions.height * 0.46,
         position: 'absolute',
         zIndex: 1,
         borderRadius: 16,
         borderWidth: 5,
         borderColor: Colors.darkBrown,
     },
+    currency:{
+        width: 20,
+        height: 20,
+    },
+    checkMark:{
+        right:60,
+        bottom:5,
+        color:'green',
+        position:'absolute'
+    }
 
 });

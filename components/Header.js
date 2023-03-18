@@ -1,8 +1,9 @@
-import { View, Text, StyleSheet, Image, SafeAreaView, ImageBackground,Dimensions } from "react-native";
+import { View, Text, StyleSheet, Image, SafeAreaView, ImageBackground } from "react-native";
 import { getCurrencys } from "../backend/http";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {useIsFocused} from "@react-navigation/native";
+import { DeviceDimensions } from "../constants/DeviceDimensions";
 
 function Header() {
     const [currencys,setCurrencys]= useState({});
@@ -67,21 +68,23 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-start',
-        marginTop: Dimensions.get('screen').height*0.05,
+        marginTop: DeviceDimensions.height*0.05,
     },
     image: {
         alignSelf: 'flex-start',
         justifyContent: 'flex-start',
     },
     background: {
-        marginBottom: Dimensions.get('screen').height*0.45
+        marginBottom: DeviceDimensions.height*0.45
     },
     shopTitle: {
         color: 'black',
         position: 'absolute',
         top: 95,
-        left: 230,
-        width: 300
+        left: 225,
+        width: 300,
+        fontWeight:'bold',
+        letterSpacing:2
     },
     currencysContainer:{
         flexDirection:'row',
