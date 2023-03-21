@@ -7,13 +7,15 @@ import { getItems } from "../backend/http";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-regular-svg-icons'
 import {DeviceDimensions} from "../constants/DeviceDimensions";
-
+import { useSelector } from "react-redux";
 
 function ItemsList() {
     const [items, setItems] = useState([]);
 
     const navigation = useNavigation();
     const isFocused=useIsFocused();
+
+    const buyedItemsIds = useSelector((state)=> state.ownedItems.ids);
 
     const handlePress = (item) => {
         navigation.navigate("Details",item);
@@ -35,7 +37,7 @@ function ItemsList() {
                                 <Text style={[styles.itemInfo,{fontSize:12}]}>{item.name}</Text>
                             </View>
                             <View style={styles.priceContainer}>
-                                {item.isOwned&&<FontAwesomeIcon size={30} style={styles.checkMark} icon={faCircleCheck} />}
+                                {(buyedItemsIds.includes(item.id)===true )&&<FontAwesomeIcon size={30} style={styles.checkMark} icon={faCircleCheck} />}
                                 <Text style={[styles.itemInfo,{fontWeight:'bold',flex:1,textAlign:'right'}]}>{item.price}</Text>
                                 <Image style={styles.currency} source={(item.currency === 'common' ? require('../images/leaf.png') : require('../images/dew.png'))} />  
                             </View>

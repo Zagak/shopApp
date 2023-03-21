@@ -4,12 +4,10 @@ import Button from "../components/Button";
 import { useNavigation } from "@react-navigation/native";
 import ItemPurchase from "../components/ItemPurchase";
 import { useState } from "react";
-import Alert from "../components/Alert";
 import { DeviceDimensions } from "../constants/DeviceDimensions";
 
 function ItemDetails({ route }) {
     const [showItemPurchase, setShowItemPurchase] = useState(false);
-    const [isOwned,setIsOwned] = useState(false);
 
     const navigation = useNavigation();
     const item = route.params;
@@ -19,18 +17,11 @@ function ItemDetails({ route }) {
     }
 
     function handleBuy(visible){
-        if(item.isOwned===false)setShowItemPurchase(visible);
-        else if(item.isOwned===true)setIsOwned(true);
-        
-    }
-
-    function handleAlert(){
-        setIsOwned(false);
+        setShowItemPurchase(visible);
     }
 
     return (
         <View style={[styles.container, showItemPurchase ? { opacity: 0.6 } : {}]}>
-            {(isOwned===true)&&<Alert title={"Already owned!"} message={"You already own this item."} onClose={handleAlert}/>}
             <View style={styles.detailsContainer}>
                 <Text style={[styles.text, { fontSize: 28 }]}>{item.name}</Text>
                 <Image style={styles.image} source={{uri:item.avatar}} onError={(e) => console.log(e)} />
