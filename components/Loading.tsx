@@ -1,7 +1,10 @@
+import React from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { DeviceDimensions } from '../constants/DeviceDimensions';
-
-function Loading({ message }) {
+interface Props{
+  message:string
+}
+const Loading:React.FC<Props>=({ message })=> {
   return (
     <View style={styles.rootContainer}>
       <Text style={styles.message}>{message}</Text>

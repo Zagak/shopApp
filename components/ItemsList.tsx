@@ -8,16 +8,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-regular-svg-icons'
 import {DeviceDimensions} from "../constants/DeviceDimensions";
 import { useSelector } from "react-redux";
+import React from "react";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParams } from "../App";
+import { Item } from "../types";
+const ItemsList:React.FC=()=> {
+    const [items, setItems] = useState<Item[]>([]);
 
-function ItemsList() {
-    const [items, setItems] = useState([]);
-
-    const navigation = useNavigation();
+    const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+    
     const isFocused=useIsFocused();
 
-    const buyedItemsIds = useSelector((state)=> state.ownedItems.ids);
+    const buyedItemsIds = useSelector((state:any)=> state.ownedItems.ids);
 
-    const handlePress = (item) => {
+    const handlePress = (item:any) => {
         navigation.navigate("Details",item);
     };
 
@@ -67,22 +72,23 @@ function ItemsList() {
 
 
     return (
-        <View style={styles.bigContainer}>
+        <>
             {items !== null && (
                 <FlatList
                     data={items}
-                    renderItem={(data) =>
-                        renderItem(data)
-                    }
-                    keyExtractor={(item, index) => index.toString()}
                     style={styles.container}
                     numColumns={2}
                     contentContainerStyle={{ flexGrow: 1, paddingBottom: 250, paddingTop: 80 }}
                     removeClippedSubviews={false}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={(data) =>
+                        renderItem(data)
+                    }
+                  
                 />
             )}
             <Image source={require('../images/dirt.jpg')} style={styles.backgroundImage} />
-        </View>
+        </>
     );
 }
 

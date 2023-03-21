@@ -1,13 +1,18 @@
+import React from "react";
 import { View ,Text,StyleSheet} from "react-native";
 import { Colors } from "../constants/Colors";
 import Button from "./Button";
-
-function Alert({title,message,onClose}){
+interface Props{
+    title:string
+    message:string
+    onClose:()=>void
+}
+const Alert:React.FC<Props>=({title,message,onClose})=>{
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{title}</Text>
             <Text style={styles.message}>{message}</Text>
-            <Button onPress={onClose}>OK</Button>
+            <Button onPress={onClose} style={undefined}>OK</Button>
         </View>
     );
 }

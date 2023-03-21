@@ -1,8 +1,13 @@
+import React from "react";
 import { Pressable } from "react-native";
 import { View, Text, StyleSheet } from "react-native";
 import { Colors } from "../constants/Colors";
-
-function Button({ children, style, onPress }) {
+interface Props{
+    children:JSX.Element|JSX.Element[]
+    style:any
+    onPress:any
+}
+const Button=({ children, style, onPress })=> {
     return (
         <Pressable style={[styles.container,style,({ pressed }) => (pressed && { opacity: 0.7 })]} onPress={onPress}>
             <View>

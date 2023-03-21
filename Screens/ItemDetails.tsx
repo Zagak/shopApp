@@ -3,18 +3,23 @@ import { Colors } from "../constants/Colors";
 import Button from "../components/Button";
 import { useNavigation } from "@react-navigation/native";
 import ItemPurchase from "../components/ItemPurchase";
-import { useState } from "react";
+import react,{ useState } from "react";
 import { DeviceDimensions } from "../constants/DeviceDimensions";
-
-function ItemDetails({ route }) {
-    const [showItemPurchase, setShowItemPurchase] = useState(false);
-
-    const navigation = useNavigation();
-    const item = route.params;
+import {NativeStackNavigationProp, NativeStackScreenProps} from '@react-navigation/native-stack';
+import React from "react";
+import { RootStackParams } from "../App";
+type Props = NativeStackScreenProps<RootStackParams, 'Details'>;
+const ItemDetails:React.FC<Props>=({route:{params:item}})=> {
+    const [showItemPurchase, setShowItemPurchase] = useState<boolean>(false);
+    console.log("MY ITEMsd= ",item)
+    const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+    
 
     function handleCancel() {
         navigation.navigate("Shop");
     }
+
 
     function handleBuy(visible){
         setShowItemPurchase(visible);
@@ -46,10 +51,10 @@ function ItemDetails({ route }) {
                 </View>
             </View>
             <View style={styles.buttons}>
-                <Button onPress={() => handleBuy(true)}>Buy</Button>
+                <Button onPress={() => handleBuy(true)}  style={undefined}>Buy</Button>
                 <Button style={{backgroundColor:'red'}} onPress={handleCancel}>Cancel</Button>
             </View>
-            <ItemPurchase visible={showItemPurchase} onClose={() => handleBuy(false)} id={route.params.id}/>
+            <ItemPurchase visible={showItemPurchase} onClose={() => handleBuy(false)} id={item.id}/>
         </View>
 
 

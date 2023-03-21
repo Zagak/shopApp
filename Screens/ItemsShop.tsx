@@ -2,9 +2,10 @@ import Header from "../components/Header";
 import ItemsList from "../components/ItemsList";
 import { StyleSheet,View } from "react-native";
 import { Colors } from "../constants/Colors";
+import React from "react";
 
 
-function ItemsShop(){
+const ItemsShop:React.FC=()=>{
     return (
         <View style={styles.container}>
             <Header/>

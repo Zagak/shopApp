@@ -3,9 +3,10 @@ import { getCurrencys } from "../backend/http";
 import { useEffect, useState } from "react";
 import {useIsFocused} from "@react-navigation/native";
 import { DeviceDimensions } from "../constants/DeviceDimensions";
+import React from "react";
 
-function Header() {
-    const [currencys,setCurrencys]= useState({});
+const Header:React.FC=() =>{
+    const [currencys,setCurrencys]= useState<any>({});
     const isFocused=useIsFocused();
 
    

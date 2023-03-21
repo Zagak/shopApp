@@ -1,13 +1,20 @@
 import 'react-native-gesture-handler';
 import ItemsShop from './Screens/ItemsShop';
 import ItemDetails from './Screens/ItemDetails';
-import { createStackNavigator } from '@react-navigation/stack';
+
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
-
+import React from 'react';
+import { Item } from './types';
+export type RootStackParams = {
+  Shop: undefined;
+  Details: Item
+};
+const Stack = createNativeStackNavigator<RootStackParams>();
 export default function App() {
-  const Stack = createStackNavigator();
+
   return (
     <>
       <Provider store={store}>

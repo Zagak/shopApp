@@ -1,14 +1,14 @@
 import {createSlice} from '@reduxjs/toolkit';
-import { buyAnItem } from '../backend/http';
+
 
 const buyedItemsSlice = createSlice({
     name:'buyedItems',
     initialState:{
-        ids:[]
+        ids:<any>[]
     },
     reducers:{
         buyItem:(state,action)=>{
-            state.ids.push(action.payload.id); 
+            state.ids.push(action?.payload?.id); 
         },
     }
 });
