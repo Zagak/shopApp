@@ -1,4 +1,4 @@
-Introducing the Skill Nation Challenge app! Upon opening the app, you'll immediately notice the two types of currency available: leafs, the standard currency, and dew, the premium currency. Scroll down to explore all of the exciting items available for purchase.
+A game like shop where you can buy items . Made in react native using typescript .Tech used : StyleSheet,Navigation,Redux,and fetches to database.
 
 Selecting an item will take you to the descriptions screen, where you can view the item's stats and choose to buy it with the green button or return to the Items screen with the red button. Should you decide to purchase the item, a prompt will appear asking you to confirm the purchase.
 
